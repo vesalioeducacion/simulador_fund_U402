@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FUNDAMENTOS DE ENFERMERÍA - Seguridad del Paciente y Cultura del Error (UCCuyo)</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX for formulas & clinical standards -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #f7f9f6;
+      color: #1e293b;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Paleta Institucional UCCuyo (Verde Oliva y Contrastes Biomédicos Canónicos) */
+    .text-accent { color: #436600; }
+    .bg-accent { background-color: #436600; }
+    .bg-accent-hover:hover { background-color: #324d00; }
+    .bg-accent-light { background-color: #f1f6eb; }
+    .border-accent { border-color: #436600; }
+
+    .text-primary { color: #436600; }
+    .bg-primary { background-color: #436600; }
+    .bg-primary-dark { background-color: #324d00; }
+    .border-primary { border-color: #436600; }
+    
+    .focus-accent:focus {
+      border-color: #436600;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 102, 0, 0.2);
+    }
+    
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .interactive-card {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .interactive-card:hover {
+      transform: translateY(-2px);
+      border-color: #436600;
+      box-shadow: 0 10px 25px -5px rgba(67, 102, 0, 0.12);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-accent/20 text-gray-800">
+
+  <!-- ==================== CABECERA INSTITUCIONAL UCCUYO ==================== -->
+  <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-xl shadow-md">
+          ENF
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-gray-800 tracking-wide uppercase">FUNDAMENTOS DE ENFERMERÍA</h1>
+          <p class="text-xs text-gray-500 font-semibold">Curso de Ingreso a la Licenciatura en Enfermería (Facultad de Cs. Médicas - UCCuyo)</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Botón Vademécum Teórico -->
+        <button onclick="openFormulasModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 hover:bg-gray-200 transition">
+          <i class="fa-solid fa-book-bookmark text-accent"></i>
+          <span class="hidden sm:inline">Vademécum</span>
+        </button>
+        <!-- Botón Guía de Uso -->
+        <button onclick="openTutorial()" class="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs font-semibold rounded-lg shadow-sm hover:bg-accent-hover transition">
+          <i class="fa-solid fa-circle-question"></i>
+          <span>Guía de Uso</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== CONTENIDO PRINCIPAL CON NAVEGACIÓN LATERAL ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
+    
+    <!-- Menú de Navegación Lateral (4 Módulos de Aprendizaje) -->
+    <nav class="w-full lg:w-64 flex flex-row lg:flex-col gap-2 bg-white p-3 rounded-2xl shadow-sm border border-gray-200 overflow-x-auto lg:overflow-x-visible whitespace-nowrap lg:whitespace-normal sticky top-20 h-fit" id="navTabs">
+      <button onclick="switchTab('mod1')" data-tab="mod1" class="nav-btn bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm flex items-center gap-2">
+        <i class="fa-solid fa-shield-halved"></i> <span>1. Enfoque Sistémico</span>
+      </button>
+      <button onclick="switchTab('mod2')" data-tab="mod2" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-diagram-project"></i> <span>2. Taxonomía del Error</span>
+      </button>
+      <button onclick="switchTab('mod3')" data-tab="mod3" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-people-roof"></i> <span>3. Cultura Justa</span>
+      </button>
+      <button onclick="switchTab('mod4')" data-tab="mod4" class="nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2">
+        <i class="fa-solid fa-list-check"></i> <span>4. Metas de Seguridad</span>
+      </button>
+    </nav>
+
+    <!-- Área de Contenido Dinámico -->
+    <div class="flex-1 space-y-6 min-w-0">
+
+      <!-- ============================================================== -->
+      <!-- MÓDULO 1: FUNDAMENTOS DE LA SEGURIDAD DEL PACIENTE -->
+      <!-- ============================================================== -->
+      <section id="mod1" class="module-section space-y-6">
+        
+        <!-- Module Intro Banner -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 border-l-4 border-l-accent">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center space-x-2 text-accent text-xs font-semibold tracking-wider uppercase mb-1">
+                <i class="fa-solid fa-certificate"></i>
+                <span>Módulo 1 • Seguridad del Paciente y Procesos Asistenciales</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Cuidar con Ciencia, Procesos y Barreras Seguras</h2>
+              <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                La seguridad de la persona sujeta de cuidado <strong>no descansa únicamente en la precaución individual</strong> del enfermero, sino en un sistema articulado de procesos estandarizados, comunicación efectiva, recursos adecuados y entornos diseñados para mitigar la probabilidad del fallo humano.
+              </p>
+            </div>
+            <div class="bg-accent-light border border-accent/30 p-3.5 rounded-xl flex items-center space-x-3 self-start md:self-auto shrink-0">
+              <i class="fa-solid fa-hand-holding-medical text-accent text-2xl"></i>
+              <div>
+                <p class="text-[11px] text-accent uppercase font-bold">Regla de Oro UCCuyo</p>
+                <p class="text-xs text-slate-700 font-mono">Detenerse $\to$ Preguntar $\to$ Verificar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tres Pilares de la Práctica Segura -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <div class="interactive-card bg-white rounded-xl p-5 border border-slate-200 shadow-xs">
+            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-network-wired"></i>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm mb-1">1. Visión Sistémica</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Los seres humanos somos falibles frente a la fatiga y el estrés. El sistema sanitario debe diseñar barreras que hagan difícil equivocarse y fácil proceder con corrección técnica y bioética.
+            </p>
+          </div>
+
+          <div class="interactive-card bg-white rounded-xl p-5 border border-slate-200 shadow-xs">
+            <div class="w-10 h-10 rounded-lg bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm mb-1">2. Verificar es Cuidar</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Cotejar pulseras, confirmar órdenes médicas y chequear dos identificadores unívocos no son trámites burocráticos: constituyen actos asistenciales sustanciales de protección de la vida humana.
+            </p>
+          </div>
+
+          <div class="interactive-card bg-white rounded-xl p-5 border border-slate-200 shadow-xs">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center text-lg mb-3">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm mb-1">3. Conducta Responsable</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Ante la menor duda o sospecha de riesgo, el aspirante jamás avanza a ciegas: se detiene, observa el entorno y consulta de inmediato con su docente o enfermero referente.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Laboratorio Interactivo: Modelo del Queso Suizo (James Reason) -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2 mb-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-accent"></i>
+                Simulador del Modelo del Queso Suizo (James Reason)
+              </h3>
+              <p class="text-xs text-slate-500">
+                Los incidentes ocurren cuando las barreras defensivas fallan y los "agujeros" se alinean permitiendo la trayectoria del daño. Activa o desactiva barreras para observar el comportamiento del sistema:
+              </p>
+            </div>
+            <span class="text-xs text-accent font-semibold bg-accent-light px-2.5 py-1 rounded-full self-start sm:self-auto">
+              Simulación de Barreras
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <!-- Barrera 1 -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-800 block">Barrera 1</span>
+                <span class="text-xs text-slate-500">Identificación Inequívoca</span>
+              </div>
+              <button id="toggle-b1" onclick="toggleBarrier(1)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-emerald-600 text-white shadow-xs">
+                ACTIVA
+              </button>
+            </div>
+
+            <!-- Barrera 2 -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-800 block">Barrera 2</span>
+                <span class="text-xs text-slate-500">Doble Chequeo Clínico</span>
+              </div>
+              <button id="toggle-b2" onclick="toggleBarrier(2)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-emerald-600 text-white shadow-xs">
+                ACTIVA
+              </button>
+            </div>
+
+            <!-- Barrera 3 -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-800 block">Barrera 3</span>
+                <span class="text-xs text-slate-500">Prevención de Caídas</span>
+              </div>
+              <button id="toggle-b3" onclick="toggleBarrier(3)" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-emerald-600 text-white shadow-xs">
+                ACTIVA
+              </button>
+            </div>
+          </div>
+
+          <!-- Estado Dinámico del Sistema -->
+          <div id="cheese-status" class="p-4 rounded-xl border text-center transition-all bg-emerald-50 border-emerald-300 text-emerald-900 text-xs sm:text-sm font-medium">
+            <i class="fa-solid fa-shield-virus mr-2 text-emerald-600"></i>
+            <span><strong>Barreras defensivas íntegras:</strong> Los procesos de seguridad contienen la desviación antes de que alcance físicamente a la persona sujeta de cuidado.</span>
+          </div>
+        </div>
+
+        <!-- Navegación inferior -->
+        <div class="flex justify-end pt-2">
+          <button onclick="switchTab('mod2')" class="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-sm transition">
+            <span>Avanzar al Módulo 2: Taxonomía del Error</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- MÓDULO 2: TAXONOMÍA DEL ERROR (OMS) -->
+      <!-- ============================================================== -->
+      <section id="mod2" class="module-section hidden space-y-6">
+        
+        <!-- Module Intro Banner -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 border-l-4 border-l-accent">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center space-x-2 text-accent text-xs font-semibold tracking-wider uppercase mb-1">
+                <i class="fa-solid fa-diagram-project"></i>
+                <span>Módulo 2 • Taxonomía Internacional de la OMS</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Riesgo, Incidente y Daño: Distinción Conceptual Estricta</h2>
+              <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                Para gestionar la seguridad clínica y desterrar la cultura del castigo, es imperativo dominar la categorización operativa estandarizada por la OMS: comprender con exactitud qué tocó al paciente y qué causó lesión real.
+              </p>
+            </div>
+            <div class="bg-accent-light border border-accent/30 p-3 rounded-xl flex items-center space-x-3 self-start md:self-auto shrink-0">
+              <i class="fa-solid fa-scale-balanced text-accent text-2xl"></i>
+              <div>
+                <p class="text-[11px] text-accent uppercase font-bold">Criterio Taxonómico</p>
+                <p class="text-xs text-slate-700 font-mono">¿Llegó? $\to$ ¿Produjo Daño?</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tres Categorías en Tarjetas Comparativas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          
+          <!-- Cuasiincidente -->
+          <div class="bg-white rounded-2xl p-5 border-t-4 border-t-amber-500 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold uppercase tracking-wider">
+                  Casi Ocurre
+                </span>
+                <i class="fa-solid fa-hand text-amber-500 text-xl"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-800">Cuasiincidente</h3>
+              <p class="text-xs text-slate-500 font-semibold">(Near Miss o Cuasiaccidente)</p>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Situación o error que <strong>se detecta y frena antes de que alcance físicamente a la persona</strong>. La barrera actuó oportunamente.
+              </p>
+              <div class="bg-amber-50 rounded-xl p-3 border border-amber-200 text-xs text-amber-900 space-y-1">
+                <strong class="font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i>Ejemplo clínico:</strong>
+                El enfermero advierte que la ampolla recibida de farmacia es errónea antes de abrirla, suspendiendo la preparación.
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-amber-700 flex items-center justify-between">
+              <span>¿Alcanzó al paciente?</span>
+              <span class="text-rose-600 font-extrabold uppercase">NO</span>
+            </div>
+          </div>
+
+          <!-- Incidente Sin Daño -->
+          <div class="bg-white rounded-2xl p-5 border-t-4 border-t-sky-500 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 text-[11px] font-bold uppercase tracking-wider">
+                  Alcanzó sin Lesión
+                </span>
+                <i class="fa-solid fa-person-circle-check text-sky-500 text-xl"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-800">Incidente Sin Daño</h3>
+              <p class="text-xs text-slate-500 font-semibold">(No-harm Incident)</p>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                El evento <strong>alcanza efectivamente a la persona</strong>, pero no le provoca ninguna lesión o perjuicio identificable.
+              </p>
+              <div class="bg-sky-50 rounded-xl p-3 border border-sky-200 text-xs text-sky-900 space-y-1">
+                <strong class="font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i>Ejemplo clínico:</strong>
+                Se administra una infusión a velocidad algo mayor por 20 minutos, pero el paciente permanece estable y sin sobrecarga hemodinámica.
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-sky-700 flex items-center justify-between">
+              <span>¿Alcanzó al paciente?</span>
+              <span class="text-emerald-600 font-extrabold uppercase">SÍ (Sin daño)</span>
+            </div>
+          </div>
+
+          <!-- Evento Adverso -->
+          <div class="bg-white rounded-2xl p-5 border-t-4 border-t-rose-600 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 text-[11px] font-bold uppercase tracking-wider">
+                  Con Perjuicio
+                </span>
+                <i class="fa-solid fa-triangle-exclamation text-rose-600 text-xl"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-800">Evento Adverso</h3>
+              <p class="text-xs text-slate-500 font-semibold">(Incidente con Daño Real)</p>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Acontecimiento imprevisto que <strong>produce daño real o lesión</strong> relacionado con la asistencia sanitaria y no con la patología de base.
+              </p>
+              <div class="bg-rose-50 rounded-xl p-3 border border-rose-200 text-xs text-rose-900 space-y-1">
+                <strong class="font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i>Aclaración crucial:</strong>
+                No todo evento adverso proviene de negligencia; requiere análisis de causa raíz para blindar el procedimiento.
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-rose-700 flex items-center justify-between">
+              <span>¿Alcanzó y dañó?</span>
+              <span class="text-rose-700 font-extrabold uppercase">SÍ (Daño real)</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Navegación inferior -->
+        <div class="flex justify-between pt-2">
+          <button onclick="switchTab('mod1')" class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl border border-gray-200 transition">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Volver al Módulo 1</span>
+          </button>
+          <button onclick="switchTab('mod3')" class="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-sm transition">
+            <span>Avanzar al Módulo 3: Cultura Justa</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- MÓDULO 3: CULTURA DEL ERROR Y APRENDIZAJE -->
+      <!-- ============================================================== -->
+      <section id="mod3" class="module-section hidden space-y-6">
+        
+        <!-- Module Intro Banner -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 border-l-4 border-l-accent">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center space-x-2 text-accent text-xs font-semibold tracking-wider uppercase mb-1">
+                <i class="fa-solid fa-people-roof"></i>
+                <span>Módulo 3 • Del Castigo al Aprendizaje Institucional</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Cultura Justa y No Punitiva del Error</h2>
+              <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                Superar el enfoque punitivo tradicional es el pilar de la seguridad hospitalaria moderna: centrarse exclusivamente en castigar al individuo oculta las fallas latentes de los procesos y garantiza la repetición del incidente.
+              </p>
+            </div>
+            <div class="bg-accent-light border border-accent/30 p-3 rounded-xl flex items-center space-x-3 self-start md:self-auto shrink-0">
+              <i class="fa-solid fa-graduation-cap text-accent text-2xl"></i>
+              <div>
+                <p class="text-[11px] text-accent uppercase font-bold">Enfoque Formativo</p>
+                <p class="text-xs text-slate-700 font-mono">Notificar $\to$ Aprender $\to$ Blindar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparación de Paradigmas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          
+          <div class="bg-white rounded-2xl p-6 border border-rose-200 shadow-sm space-y-3">
+            <div class="flex items-center space-x-3 text-rose-700">
+              <i class="fa-solid fa-ban text-2xl"></i>
+              <h3 class="font-bold text-base text-slate-900">Enfoque Punitivo Tradicional (Obsoleto)</h3>
+            </div>
+            <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside leading-relaxed">
+              <li>Busca señalar y sancionar de inmediato al individuo.</li>
+              <li>Provoca ocultamiento sistemático de equivocaciones por temor al castigo o represalia.</li>
+              <li>Las fallas de diseño, rotulación engañosa y falta de insumos quedan intactas.</li>
+              <li>El mismo incidente se repite cíclicamente con otros profesionales.</li>
+            </ul>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 border border-emerald-200 shadow-sm space-y-3">
+            <div class="flex items-center space-x-3 text-accent">
+              <i class="fa-solid fa-graduation-cap text-2xl"></i>
+              <h3 class="font-bold text-base text-slate-900">Cultura Justa y de Aprendizaje (UCCuyo)</h3>
+            </div>
+            <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside leading-relaxed">
+              <li>Diferencia el error humano no intencional de la negligencia o imprudencia deliberada.</li>
+              <li>Fomenta la notificación voluntaria, rápida y no persecutoria de cualquier incidente.</li>
+              <li>Analiza factores predisponentes (fatiga, rotulación, carga asistencial, iluminación).</li>
+              <li>Transforma cada fallo en una oportunidad institucional para blindar los procedimientos.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Protocolo Secuencial de 4 Pasos ante un Incidente -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center space-x-2">
+              <i class="fa-solid fa-shoe-prints text-accent"></i>
+              <span>Secuencia Ética de Actuación Profesional ante un Incidente</span>
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">Algoritmo ineludible que todo estudiante de enfermería debe aplicar:</p>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+              <div class="space-y-2">
+                <span class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center font-bold text-xs">1</span>
+                <h4 class="font-bold text-xs sm:text-sm text-slate-800">Proteger de Inmediato</h4>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  La prioridad absoluta es la persona. Suspender la intervención, evaluar signos vitales y estabilizar clínicamente al paciente.
+                </p>
+              </div>
+              <div class="mt-3 text-[11px] text-accent font-semibold flex items-center">
+                <i class="fa-solid fa-shield-halved mr-1"></i> Máxima Urgencia Asistencial
+              </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+              <div class="space-y-2">
+                <span class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center font-bold text-xs">2</span>
+                <h4 class="font-bold text-xs sm:text-sm text-slate-800">Comunicar al Equipo</h4>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Avisar oportunamente al enfermero a cargo, docente y médico tratante para coordinar las medidas terapéuticas necesarias.
+                </p>
+              </div>
+              <div class="mt-3 text-[11px] text-accent font-semibold flex items-center">
+                <i class="fa-solid fa-bullhorn mr-1"></i> Comunicación Oportuna
+              </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+              <div class="space-y-2">
+                <span class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center font-bold text-xs">3</span>
+                <h4 class="font-bold text-xs sm:text-sm text-slate-800">Notificar Formalmente</h4>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Registrar en el sistema de reporte institucional según procedimiento, preservando la trazabilidad formativa sin temor al castigo.
+                </p>
+              </div>
+              <div class="mt-3 text-[11px] text-accent font-semibold flex items-center">
+                <i class="fa-solid fa-file-signature mr-1"></i> Notificación No Punitiva
+              </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+              <div class="space-y-2">
+                <span class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center font-bold text-xs">4</span>
+                <h4 class="font-bold text-xs sm:text-sm text-slate-800">Analizar y Mejorar</h4>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Investigar las causas raíces (árbol causal) y diseñar mejoras institucionales para evitar la recurrencia del error.
+                </p>
+              </div>
+              <div class="mt-3 text-[11px] text-accent font-semibold flex items-center">
+                <i class="fa-solid fa-rotate mr-1"></i> Aprendizaje Institucional
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Navegación inferior -->
+        <div class="flex justify-between pt-2">
+          <button onclick="switchTab('mod2')" class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl border border-gray-200 transition">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Volver al Módulo 2</span>
+          </button>
+          <button onclick="switchTab('mod4')" class="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-sm transition">
+            <span>Avanzar al Módulo 4: Metas de Seguridad</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ============================================================== -->
+      <!-- MÓDULO 4: LAS SEIS METAS INTERNACIONALES DE SEGURIDAD -->
+      <!-- ============================================================== -->
+      <section id="mod4" class="module-section hidden space-y-6">
+        
+        <!-- Module Intro Banner -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 border-l-4 border-l-accent">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center space-x-2 text-accent text-xs font-semibold tracking-wider uppercase mb-1">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Módulo 4 • Metas Internacionales de Seguridad (OMS / JCI)</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Seis Metas Internacionales de Seguridad del Paciente</h2>
+              <p class="text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                Directrices prioritarias para neutralizar los puntos más vulnerables del acto asistencial en enfermería.
+              </p>
+            </div>
+            <div class="bg-accent-light border border-accent/30 p-3 rounded-xl flex items-center space-x-3 self-start md:self-auto shrink-0">
+              <i class="fa-solid fa-shield-virus text-accent text-2xl"></i>
+              <div>
+                <p class="text-[11px] text-accent uppercase font-bold">Estándar Asistencial</p>
+                <p class="text-xs text-slate-700 font-mono">Barreras Transversales</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid de las 6 Metas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          
+          <!-- Meta 1 -->
+          <div class="interactive-card bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold px-2.5 py-1 rounded bg-sky-100 text-sky-800">META 1</span>
+                <i class="fa-solid fa-id-card-clip text-xl text-sky-700"></i>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">Identificación Correcta</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Uso obligatorio de <strong>al menos dos identificadores unívocos</strong> (ej. Nombre y Apellido completo + DNI o Historia Clínica).
+              </p>
+              <div class="p-2.5 bg-rose-50 rounded-lg text-xs text-rose-800 border border-rose-200 font-medium">
+                <i class="fa-solid fa-ban mr-1 text-rose-600"></i>
+                <strong>Prohibido:</strong> Jamás usar el número de cama o habitación como identificador.
+              </div>
+            </div>
+          </div>
+
+          <!-- Meta 2 -->
+          <div class="interactive-card bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold px-2.5 py-1 rounded bg-emerald-100 text-emerald-800">META 2</span>
+                <i class="fa-solid fa-comments text-xl text-emerald-700"></i>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">Comunicación Efectiva</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Detenerse y aclarar toda información incompleta, confusa o contradictoria antes de proceder. En órdenes críticas: <strong>Escuchar - Escribir - Leer - Confirmar</strong>.
+              </p>
+              <div class="p-2.5 bg-emerald-50 rounded-lg text-xs text-emerald-900 border border-emerald-200 font-medium">
+                <i class="fa-solid fa-check-double mr-1 text-emerald-600"></i>
+                Cerrar el circuito de comunicación verbal (Closed Loop).
+              </div>
+            </div>
+          </div>
+
+          <!-- Meta 3 -->
+          <div class="interactive-card bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold px-2.5 py-1 rounded bg-amber-100 text-amber-800">META 3</span>
+                <i class="fa-solid fa-pills text-xl text-amber-700"></i>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">Medicamentos de Alto Riesgo</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Doble chequeo independiente de electrolitos concentrados, anticoagulantes e insulinas. Almacenamiento rotulado diferenciado para evitar confusiones con drogas LASA.
+              </p>
+              <div class="p-2.5 bg-amber-50 rounded-lg text-xs text-amber-900 border border-amber-200 font-medium">
+                <i class="fa-solid fa-eye mr-1 text-amber-600"></i>
+                Prevenir fármacos de aspecto o fonética similar.
+              </div>
+            </div>
+          </div>
+
+          <!-- Meta 4 -->
+          <div class="interactive-card bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold px-2.5 py-1 rounded bg-indigo-100 text-indigo-800">META 4</span>
+                <i class="fa-solid fa-check-to-slot text-xl text-indigo-700"></i>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">Cirugía y Procedimiento Seguro</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Verificación rigurosa de <strong>paciente correcto, procedimiento correcto y sitio quirúrgico correspondiente</strong> mediante lista de chequeo y pausa de seguridad (Time Out).
+              </p>
+              <div class="p-2.5 bg-indigo-50 rounded-lg text-xs text-indigo-900 border border-indigo-200 font-medium">
+                <i class="fa-solid fa-pen-nib mr-1 text-indigo-600"></i>
+                Demarcación anatómica activa del sitio antes de operar.
+              </div>
+            </div>
+          </div>
+
+          <!-- Meta 5 -->
+          <div class="interactive-card bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold px-2.5 py-1 rounded bg-teal-100 text-teal-800">META 5</span>
+                <i class="fa-solid fa-hands-bubbles text-xl text-teal-700"></i>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">Reducción de Infecciones (IACS)</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                La <strong>higiene de manos</strong> en los 5 momentos recomendados por la OMS es la barrera transversal de mayor impacto y efectividad en toda la atención sanitaria.
+              </p>
+              <div class="p-2.5 bg-teal-50 rounded-lg text-xs text-teal-900 border border-teal-200 font-medium">
+                <i class="fa-solid fa-soap mr-1 text-teal-600"></i>
+                Fricción alcohólica o agua y jabón según técnica estricta.
+              </div>
+            </div>
+          </div>
+
+          <!-- Meta 6 -->
+          <div class="interactive-card bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold px-2.5 py-1 rounded bg-rose-100 text-rose-800">META 6</span>
+                <i class="fa-solid fa-person-falling-burst text-xl text-rose-700"></i>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-slate-900 mb-1.5">Prevención de Caídas</h3>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Identificación activa y periódica del riesgo (mareo, medicación sedante, hipotensión). Valoración individual, barandas de contención y asistencia sin improvisaciones.
+              </p>
+              <div class="p-2.5 bg-rose-50 rounded-lg text-xs text-rose-900 border border-rose-200 font-medium">
+                <i class="fa-solid fa-triangle-exclamation mr-1 text-rose-600"></i>
+                No delegar ni conformarse con un mero "tenga cuidado".
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Casos Asistenciales Paradigmáticos de la Cátedra (Estudio Reflexivo) -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-user-doctor text-accent"></i>
+              Situaciones Paradigmáticas de la Práctica Asistencial
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600 mt-0.5">
+              Reflexión crítica guiada sobre dos escenarios representativos del ingreso a la enfermería:
+            </p>
+          </div>
+
+          <!-- Caso 1 -->
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase px-2.5 py-1 bg-rose-100 text-rose-800 rounded-full">Escenario 1: Prevención Activa de Caídas</span>
+              <span class="text-xs text-slate-500 font-semibold"><i class="fa-solid fa-bed mr-1"></i> Habitación 304</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              Don Pedro (76 años), internado por neumonía y medicado con ansiolíticos la noche anterior, se sienta al borde de la cama, refiere <strong>"sensación de mareo e inestabilidad"</strong> y manifiesta que desea levantarse solo para ir al sanitario ya mismo.
+            </p>
+            <div class="p-3.5 bg-white rounded-xl border border-emerald-200 text-xs sm:text-sm text-slate-700 space-y-1">
+              <strong class="text-accent flex items-center gap-1.5 font-bold">
+                <i class="fa-solid fa-check-circle text-emerald-600"></i> Conducta Profesional Correcta:
+              </strong>
+              <p class="leading-relaxed">
+                Detener la deambulación de inmediato y contener a Don Pedro en posición segura (cama o sillón). <strong>Bajo sensación de mareo nunca se improvisa la marcha</strong> ni se confía en advertencias superficiales como <em>"vaya con cuidado"</em>. Se ofrece chata u orinal en cama, se elevan las barandas de contención y se notifica al equipo responsable para reevaluar su hemodinamia.
+              </p>
+            </div>
+          </div>
+
+          <!-- Caso 2 -->
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full">Escenario 2: Confusión de Identidad y Aprendizaje Institucional</span>
+              <span class="text-xs text-slate-500 font-semibold"><i class="fa-solid fa-clipboard-user mr-1"></i> Unidad de Cuidados Intermedios</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              En la sala se encuentran internados dos pacientes con apellidos homónimos: <em>Juan Gómez (cama 12)</em> y <em>Juan G. Gómez (cama 14)</em>. Al retirar una orden para colocar una sonda vesical, el aspirante toma la historia clínica que estaba en la mesa de la cama 12. Al acercarse, el estudiante solicita activamente el nombre completo y confirma el número de DNI contra la pulsera colocada, percatándose de que la carpeta pertenecía al paciente de la cama 14. <strong>No se realizó ningún procedimiento indebido.</strong>
+            </p>
+            <div class="p-3.5 bg-white rounded-xl border border-emerald-200 text-xs sm:text-sm text-slate-700 space-y-1">
+              <strong class="text-accent flex items-center gap-1.5 font-bold">
+                <i class="fa-solid fa-check-circle text-emerald-600"></i> Criterio Taxonómico y Conducta Ética:
+              </strong>
+              <p class="leading-relaxed">
+                Se trata de un <strong>Cuasiincidente (Near Miss)</strong>: la barrera de verificación de dos identificadores funcionó eficazmente y evitó que el error alcanzara al paciente. Lejos de ocultarlo, la cultura justa exige notificar el evento formalmente en el sistema institucional para que se optimice la rotulación de pacientes homónimos y se blinde al equipo en los siguientes turnos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón hacia inicio/módulos -->
+        <div class="flex justify-between pt-2">
+          <button onclick="switchTab('mod3')" class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl border border-gray-200 transition">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Volver al Módulo 3</span>
+          </button>
+          <button onclick="switchTab('mod1')" class="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-sm transition">
+            <span>Volver al Inicio (Módulo 1)</span>
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==================== MODAL VADEMÉCUM TEÓRICO (IDÉNTICO A U4-01) ==================== -->
+  <div id="modal-formulas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200">
+      
+      <div class="bg-white p-4 sm:p-5 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-accent text-white flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-book-bookmark"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-800 text-sm sm:text-base">Vademécum de Seguridad del Paciente</h3>
+            <p class="text-[11px] text-gray-500">Fundamentos y Estándares Internacionales (OMS - UCCuyo)</p>
+          </div>
+        </div>
+        <button onclick="closeFormulasModal()" class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-6 text-xs sm:text-sm custom-scroll">
+        
+        <!-- Taxonomía OMS -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+          <h4 class="font-bold text-accent mb-2 flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-diagram-project"></i> 1. Taxonomía de Seguridad del Paciente (OMS)
+          </h4>
+          <div class="space-y-2 text-slate-700">
+            <p><strong>Cuasiincidente (Near miss):</strong> Error detectado antes de tocar al paciente ($P_{\text{contacto}} = 0$).</p>
+            <p><strong>Incidente sin daño:</strong> Alcanza a la persona pero no genera perjuicio detectable.</p>
+            <p><strong>Evento adverso:</strong> Lesión física imprevista derivada de la atención de salud ($P_{\text{daño}} > 0$).</p>
+          </div>
+        </div>
+
+        <!-- 6 Metas Resumen -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+          <h4 class="font-bold text-accent mb-2 flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-list-check"></i> 2. Las 6 Metas Internacionales
+          </h4>
+          <ul class="list-disc list-inside space-y-1 text-slate-700">
+            <li><strong>Meta 1:</strong> Identificación inequívoca ($\ge 2$ identificadores; nunca número de cama).</li>
+            <li><strong>Meta 2:</strong> Comunicación efectiva (técnica cerrada: escuchar-escribir-leer-confirmar).</li>
+            <li><strong>Meta 3:</strong> Medicamentos de alto riesgo (doble chequeo y separación de drogas LASA).</li>
+            <li><strong>Meta 4:</strong> Cirugía segura (paciente, procedimiento y sitio anatífico correcto).</li>
+            <li><strong>Meta 5:</strong> Reducción de IACS (higiene de manos en 5 momentos).</li>
+            <li><strong>Meta 6:</strong> Prevención de caídas (valoración activa y asistencia sin improvisación).</li>
+          </ul>
+        </div>
+
+        <!-- Algoritmo 4 Pasos -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+          <h4 class="font-bold text-accent mb-2 flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-shoe-prints"></i> 3. Secuencia Ética ante un Incidente
+          </h4>
+          <p class="text-slate-700 font-mono text-xs">
+            1. Proteger al Paciente $\to$ 2. Comunicar al Equipo $\to$ 3. Notificar Institucionalmente $\to$ 4. Análisis de Causa Raíz
+          </p>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end">
+        <button onclick="closeFormulasModal()" class="px-4 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover text-xs transition shadow-sm">
+          Cerrar Vademécum
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL GUÍA DE USO (ESTÁNDAR CANÓNICO U4-01) ==================== -->
+  <div id="modal-tutorial" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200">
+      
+      <div class="bg-white p-4 sm:p-5 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-accent text-white flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-800 text-sm sm:text-base">Guía de Uso del Simulador</h3>
+            <p class="text-[11px] text-gray-500">Orientaciones pedagógicas para el aspirante a la Licenciatura en Enfermería</p>
+          </div>
+        </div>
+        <button onclick="closeTutorial()" class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-6 text-xs md:text-sm text-gray-700 custom-scroll leading-relaxed">
+        
+        <!-- Sección 1: Propósito -->
+        <div class="border-b border-gray-100 pb-4">
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-bullseye"></i> 1. Propósito Tecnopedagógico
+          </h4>
+          <p class="text-gray-600 leading-relaxed">
+            Este simulador interactivo está concebido como una herramienta de andamiaje formativo para los aspirantes al <strong>Curso de Ingreso a la Licenciatura en Enfermería (Facultad de Ciencias Médicas - Universidad Católica de Cuyo)</strong>. Su objetivo es que comprendas que la seguridad del paciente no depende únicamente de la voluntad individual, sino de procesos estandarizados, barreras defensivas, comunicación asertiva y una cultura justa orientada al aprendizaje institucional continuo.
+          </p>
+        </div>
+
+        <!-- Sección 2: Guía Detallada de Módulos y Simuladores -->
+        <div class="border-b border-gray-100 pb-4">
+          <h4 class="font-bold text-accent text-sm mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-layer-group"></i> 2. Guía Detallada de Módulos y Herramientas Interactivas
+          </h4>
+          
+          <div class="space-y-3 text-gray-600">
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-accent flex items-center gap-1.5 mb-1 text-xs sm:text-sm">
+                <i class="fa-solid fa-shield-halved"></i> Módulo 1: Enfoque Sistémico y Modelo del Queso Suizo
+              </strong>
+              <p>Comprende los 3 pilares del acto de cuidar (visión sistémica, verificación como cuidado y conducta formativa responsable). Utiliza el <strong>Simulador del Queso Suizo de James Reason</strong> para activar y desactivar barreras defensivas en tiempo real y observar cómo se previene la trayectoria del daño.</p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-accent flex items-center gap-1.5 mb-1 text-xs sm:text-sm">
+                <i class="fa-solid fa-diagram-project"></i> Módulo 2: Taxonomía del Error (OMS)
+              </strong>
+              <p>Diferencia con precisión conceptual estricta entre <strong>Cuasiincidente</strong> (el error se detiene antes de alcanzar a la persona), <strong>Incidente sin daño</strong> (toca a la persona sin provocar lesión) y <strong>Evento adverso</strong> (produce daño real relacionado con el cuidado y no con la patología de base).</p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-accent flex items-center gap-1.5 mb-1 text-xs sm:text-sm">
+                <i class="fa-solid fa-people-roof"></i> Módulo 3: Cultura Justa y Secuencia Ética ante un Incidente
+              </strong>
+              <p>Supera el paradigma punitivo obsoleto (que oculta errores y busca culpables) y adopta la <em>Cultura Justa</em> de la UCCuyo. Domina el algoritmo protocolizado de 4 pasos obligatorios: <strong>1. Proteger de inmediato</strong> $\to$ <strong>2. Comunicar al equipo</strong> $\to$ <strong>3. Notificar formalmente</strong> $\to$ <strong>4. Analizar causas y mejorar procesos</strong>.</p>
+            </div>
+
+            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+              <strong class="text-accent flex items-center gap-1.5 mb-1 text-xs sm:text-sm">
+                <i class="fa-solid fa-list-check"></i> Módulo 4: Seis Metas Internacionales y Escenarios Paradigmáticos
+              </strong>
+              <p>Examina las 6 Metas Internacionales (identificación unívoca con $\ge 2$ datos, comunicación efectiva en circuito cerrado, drogas de alto riesgo, cirugía segura, higiene de manos y prevención de caídas). Analiza las dos situaciones clínicas reales de la cátedra: <em>manejo del paciente con mareo</em> e <em>intercambio de historias clínicas en pacientes homónimos</em>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección 3: Consejos de Navegación y Vademécum -->
+        <div>
+          <h4 class="font-bold text-accent text-sm mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info"></i> 3. Consejos de Estudio y Consulta Permanente
+          </h4>
+          <p class="text-gray-600 leading-relaxed">
+            Puedes consultar el <strong>Vademécum</strong> en cualquier momento mediante el botón superior para repasar definiciones taxonómicas, las 6 metas y la fórmula de actuación. El simulador te permite avanzar y retroceder entre módulos de forma libre y reflexiva.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end">
+        <button onclick="closeTutorial()" class="px-5 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover text-xs transition shadow-sm">
+          Entendido, Comenzar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de Página Institucional Canónico -->
+  <footer class="bg-white border-t border-gray-200 py-3 text-center text-xs text-gray-500 font-medium">
+    Desarrollado por vesalio - Todos los derechos reservados
+  </footer>
+
+  <!-- ==================== LÓGICA JAVASCRIPT ==================== -->
+  <script>
+    // ESTADO GLOBAL DE LA APLICACIÓN
+    const appState = {
+      activeTab: 'mod1',
+      barriers: { 1: true, 2: true, 3: true }
+    };
+
+    // NAVEGACIÓN ENTRE MÓDULOS (ESTILO CANÓNICO U4-01)
+    function switchTab(tabId) {
+      appState.activeTab = tabId;
+
+      // Ocultar todas las secciones
+      document.querySelectorAll('.module-section').forEach(sec => {
+        sec.classList.add('hidden');
+      });
+
+      // Mostrar sección seleccionada
+      const targetSec = document.getElementById(tabId);
+      if (targetSec) targetSec.classList.remove('hidden');
+
+      // Actualizar botones de navegación lateral
+      document.querySelectorAll('#navTabs .nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.className = "nav-btn bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm flex items-center gap-2";
+        } else {
+          btn.className = "nav-btn text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-xs sm:text-sm font-medium transition flex items-center gap-2";
+        }
+      });
+
+      // Scroll suave hacia arriba
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Render KaTeX si aplica
+      if (window.renderMathInElement) {
+        try {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });
+        } catch(e) {}
+      }
+    }
+
+    // MODAL VADEMÉCUM
+    function openFormulasModal() {
+      const modal = document.getElementById('modal-formulas');
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (window.renderMathInElement) {
+          try {
+            renderMathInElement(modal, {
+              delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+              ],
+              throwOnError: false
+            });
+          } catch(e) {}
+        }
+      }
+    }
+    function closeFormulasModal() {
+      const modal = document.getElementById('modal-formulas');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // MODAL GUÍA DE USO
+    function openTutorial() {
+      const modal = document.getElementById('modal-tutorial');
+      if (modal) modal.classList.remove('hidden');
+    }
+    function closeTutorial() {
+      const modal = document.getElementById('modal-tutorial');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // MÓDULO 1: BARRERAS DEL QUESO SUIZO
+    function toggleBarrier(id) {
+      appState.barriers[id] = !appState.barriers[id];
+      const btn = document.getElementById(`toggle-b${id}`);
+      
+      if (appState.barriers[id]) {
+        btn.textContent = "ACTIVA";
+        btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition bg-emerald-600 text-white shadow-xs";
+      } else {
+        btn.textContent = "FALLIDA";
+        btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition bg-rose-600 text-white shadow-xs";
+      }
+
+      const statusEl = document.getElementById('cheese-status');
+      const activeCount = Object.values(appState.barriers).filter(Boolean).length;
+
+      if (activeCount === 3) {
+        statusEl.className = "p-4 rounded-xl border text-center transition-all bg-emerald-50 border-emerald-300 text-emerald-900 text-xs sm:text-sm font-medium";
+        statusEl.innerHTML = `<i class="fa-solid fa-shield-virus mr-2 text-emerald-600"></i><span><strong>Barreras defensivas íntegras:</strong> Los procesos de seguridad contienen la desviación antes de que alcance físicamente a la persona sujeta de cuidado.</span>`;
+      } else if (activeCount > 0) {
+        statusEl.className = "p-4 rounded-xl border text-center transition-all bg-amber-50 border-amber-300 text-amber-900 text-xs sm:text-sm font-medium";
+        statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2 text-amber-600"></i><span><strong>Atención preventiva:</strong> Existen fallas latentes en el sistema (${3 - activeCount}). Se requiere mayor vigilancia y detención reflexiva para evitar el daño.</span>`;
+      } else {
+        statusEl.className = "p-4 rounded-xl border text-center transition-all bg-rose-50 border-rose-300 text-rose-900 text-xs sm:text-sm font-medium";
+        statusEl.innerHTML = `<i class="fa-solid fa-skull-crossbones mr-2 text-rose-600"></i><span><strong>Peligro Crítico:</strong> Se han alineado todas las fallas latentes. El evento adverso alcanza con daño directo y perjuicio real al paciente.</span>`;
+      }
+    }
+
+    // INICIALIZACIÓN
+    window.addEventListener('DOMContentLoaded', () => {
+      switchTab('mod1');
+    });
+  </script>
+</body>
+</html>
